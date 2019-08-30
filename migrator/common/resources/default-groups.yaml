@@ -1,0 +1,142 @@
+# config in YAML format
+
+groups-2to3:
+  - name: low-risk, beautiful fixers
+    fixers:
+      - apply
+      - asserts
+      - basestring
+      - except
+      - exec
+      - execfile
+      - exitfunc
+      - funcattrs
+      - future
+      - getcwdu
+      - has_key
+      - imports
+      - imports2
+      - intern
+      - isinstance
+      - itertools_imports
+      - itertools
+      - long
+      - metaclass
+      - methodattrs
+      - ne
+      - next
+      - nonzero
+      - numliterals
+      - operator
+      - paren
+      - raw_input
+      - reduce
+      - reload
+      - renames
+      - repr
+      - standarderror
+      - sys_exc
+      - throw
+      - types
+      - urllib
+      - xreadlines
+
+  - name: low-risk, ugly fixers
+    fixers:
+      - unicode
+      - filter
+      - input
+      - map
+      - tuple_params
+      - xrange
+      - zip
+      - dict
+      - print
+
+  - name: buffer to memoryview
+    fixers:
+      - buffer
+    description:
+      Converts buffer to memoryview. memoryview API is similar but not exactly the same as that of buffer.
+    only_on_write_params: [ -p ]
+
+  - name: raise
+    fixers:
+      - raise
+    description:
+      Converts raise E, V to raise E(V), and raise E, V, T to raise E(V).with_traceback(T). If E is a tuple,
+      the translation will be incorrect because substituting tuples for exceptions has been removed in 3.0.
+    only_on_write_params: [ -p ]
+
+  - name: import
+    fixers:
+      - import
+    description:
+      Relative imports can get messed up in case of a name conflict.
+    only_on_write_params: [ -p ]
+
+
+  # not included as non-functional: idioms, set_literal, ws_comma
+
+groups-futurize:
+  - name: stage1
+    fixers:
+      - lib2to3.fixes.fix_apply
+      - lib2to3.fixes.fix_except
+      - lib2to3.fixes.fix_exitfunc
+      - lib2to3.fixes.fix_funcattrs
+      - lib2to3.fixes.fix_has_key
+      - lib2to3.fixes.fix_idioms
+      - lib2to3.fixes.fix_intern
+      - lib2to3.fixes.fix_isinstance
+      - lib2to3.fixes.fix_methodattrs
+      - lib2to3.fixes.fix_ne
+      - lib2to3.fixes.fix_numliterals
+      - lib2to3.fixes.fix_paren
+      - lib2to3.fixes.fix_reduce
+      - lib2to3.fixes.fix_renames
+      - lib2to3.fixes.fix_repr
+      - lib2to3.fixes.fix_standarderror
+      - lib2to3.fixes.fix_sys_exc
+      - lib2to3.fixes.fix_throw
+      - lib2to3.fixes.fix_tuple_params
+      - lib2to3.fixes.fix_types
+      - lib2to3.fixes.fix_ws_comma
+      - lib2to3.fixes.fix_xreadlines
+      - libfuturize.fixes.fix_absolute_import
+      - libfuturize.fixes.fix_next_call
+      - libfuturize.fixes.fix_print_with_import
+      - libfuturize.fixes.fix_raise
+    desctiption:
+      https://python-future.org/futurize.html#stage-1-safe-fixes
+
+
+  - name: stage2
+    fixers:
+#      - lib2to3.fixes.fix_basestring
+      - lib2to3.fixes.fix_dict
+      - lib2to3.fixes.fix_exec
+      - lib2to3.fixes.fix_getcwdu
+      - lib2to3.fixes.fix_input
+      - lib2to3.fixes.fix_itertools
+      - lib2to3.fixes.fix_itertools_imports
+      - lib2to3.fixes.fix_filter
+      - lib2to3.fixes.fix_long
+      - lib2to3.fixes.fix_map
+      - lib2to3.fixes.fix_nonzero
+      - lib2to3.fixes.fix_operator
+      - lib2to3.fixes.fix_raw_input
+      - lib2to3.fixes.fix_zip
+      - libfuturize.fixes.fix_cmp
+#      - libfuturize.fixes.fix_division
+      - libfuturize.fixes.fix_execfile
+      - libfuturize.fixes.fix_future_builtins
+      - libfuturize.fixes.fix_future_standard_library
+      - libfuturize.fixes.fix_future_standard_library_urllib
+      - libfuturize.fixes.fix_metaclass
+      - libpasteurize.fixes.fix_newstyle
+      - libfuturize.fixes.fix_object
+      - libfuturize.fixes.fix_unicode_keep_u
+      - libfuturize.fixes.fix_xrange_with_import
+    desctiption:
+      https://python-future.org/futurize.html#stage-2-py3-style-code-with-wrappers-for-py2
